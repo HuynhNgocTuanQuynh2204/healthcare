@@ -119,17 +119,25 @@ public class Database extends SQLiteOpenHelper {
         db.insert("orderplace",null,cv);
         db.close();
     }
-    public ArrayList getOrderData(String username){
+    public ArrayList<String> getOrderData(String username) {
         ArrayList<String> arr = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String str[] = new String[1];
-        str[0]=username;
-        Cursor c = db.rawQuery("select * from orderplace where username = ?",str);
-        if(c.moveToFirst()){
-            do{
-                arr.add(c.getString(1)+"$"+c.getString(2)+"$"+c.getString(4)+"$"+c.getString(5)+"$"+c.getString(6)+"$"+c.getString(7)+"$"+c.getString(8));
-            }while (c.moveToNext());
+        String str[] = new String[] {username};
+        Cursor c = db.rawQuery("SELECT * FROM orderplace WHERE username = ?", str);
+        if (c.moveToFirst()) {
+            do {
+                String orderData = c.getString(c.getColumnIndex("fullname")) + "$" +
+                        c.getString(c.getColumnIndex("address")) + "$" +
+                        c.getString(c.getColumnIndex("contactno")) + "$" +
+                        c.getInt(c.getColumnIndex("pincode")) + "$" +
+                        c.getString(c.getColumnIndex("date")) + "$" +
+                        c.getString(c.getColumnIndex("time")) + "$" +
+                        c.getFloat(c.getColumnIndex("amount")) + "$" +
+                        c.getString(c.getColumnIndex("otype"));
+                arr.add(orderData);
+            } while (c.moveToNext());
         }
+        c.close();
         db.close();
         return arr;
     }
