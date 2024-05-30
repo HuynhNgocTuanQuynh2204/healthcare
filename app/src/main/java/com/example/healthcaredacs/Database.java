@@ -17,112 +17,116 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-         String qry1 = "create table users(username text, email text,password text)";
-         sqLiteDatabase.execSQL(qry1);
+        String qry1 = "create table users(username text, email text,password text)";
+        sqLiteDatabase.execSQL(qry1);
 
-         String qry2 = "create table cart(username text, product text,price float,otype text)";
-         sqLiteDatabase.execSQL(qry2);
+        String qry2 = "create table cart(username text, product text,price float,otype text)";
+        sqLiteDatabase.execSQL(qry2);
 
-         String qry3 = "create table orderplace(username text,fullname text,address text,contactno text,pincode int,date text,time text,amount float,otype text)";
-         sqLiteDatabase.execSQL(qry3);
+        String qry3 = "create table orderplace(username text,fullname text,address text,contactno text,pincode int,date text,time text,amount float,otype text)";
+        sqLiteDatabase.execSQL(qry3);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase  sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-    public void registor(String username, String email, String password){
+
+    public void registor(String username, String email, String password) {
         ContentValues cv = new ContentValues();
-        cv.put("username",username);
-        cv.put("password",password);
+        cv.put("username", username);
+        cv.put("password", password);
         SQLiteDatabase db = getWritableDatabase();
-        db.insert("users",null,cv);
+        db.insert("users", null, cv);
         db.close();
 
     }
 
-    public int login(String username,String password){
-        int result=0;
+    public int login(String username, String password) {
+        int result = 0;
         String str[] = new String[2];
-        str[0]= username;
-        str[1]= password;
+        str[0] = username;
+        str[1] = password;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c =db.rawQuery("select * from users where username=? and password=?",str);
-        if(c.moveToFirst()){
-            result=1;
+        Cursor c = db.rawQuery("select * from users where username=? and password=?", str);
+        if (c.moveToFirst()) {
+            result = 1;
         }
         return result;
     }
-    public void addCart(String username, String product, float price, String otype){
+
+    public void addCart(String username, String product, float price, String otype) {
         ContentValues cv = new ContentValues();
-        cv.put("username",username);
-        cv.put("product",product);
-        cv.put("price",price);
-        cv.put("otype",otype);
+        cv.put("username", username);
+        cv.put("product", product);
+        cv.put("price", price);
+        cv.put("otype", otype);
         SQLiteDatabase db = getWritableDatabase();
-        db.insert("cart",null,cv);
+        db.insert("cart", null, cv);
         db.close();
     }
+
     public int checkCart(String username, String product) {
         int result = 0;
         String str[] = new String[2];
         str[0] = username;
         str[1] = product;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("select * from cart where username = ? and product = ?",str);
-        if(c.moveToFirst()){
-            result =1;
+        Cursor c = db.rawQuery("select * from cart where username = ? and product = ?", str);
+        if (c.moveToFirst()) {
+            result = 1;
         }
         db.close();
         return result;
     }
 
-    public void removeCart(String username,String otype){
+    public void removeCart(String username, String otype) {
         String str[] = new String[2];
         str[0] = username;
         str[1] = otype;
         SQLiteDatabase db = getWritableDatabase();
-        db.delete("cart","username=? and otype=?",str);
+        db.delete("cart", "username=? and otype=?", str);
         db.close();
     }
 
-    public ArrayList getCartData(String username, String otype){
+    public ArrayList getCartData(String username, String otype) {
         ArrayList<String> arr = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String str[] = new String[2];
         str[0] = username;
         str[1] = otype;
-        Cursor c = db.rawQuery("select * from cart where username = ? and otype = ?",str);
-        if(c.moveToFirst()){
-            do{
+        Cursor c = db.rawQuery("select * from cart where username = ? and otype = ?", str);
+        if (c.moveToFirst()) {
+            do {
                 String product = c.getString(1);
                 String price = c.getString(2);
-                arr.add(product+"$"+price);
-            }while(c.moveToNext());
+                arr.add(product + "$" + price);
+            } while (c.moveToNext());
         }
         db.close();
         return arr;
     }
 
-    public void addOrder(String username,String fullname, String address, String contact,int pincode,String date,String time, float price,String otype){
+    public void addOrder(String username, String fullname, String address, String contact, int pincode, String date, String time, float price, String otype) {
         ContentValues cv = new ContentValues();
-        cv.put("username",username);
-        cv.put("fullname",fullname);
-        cv.put("address",address);
-        cv.put("contactno",contact);
-        cv.put("pincode",pincode);
-        cv.put("date",date);
-        cv.put("time",time);
-        cv.put("amount",price);
-        cv.put("otype",otype);
+        cv.put("username", username);
+        cv.put("fullname", fullname);
+        cv.put("address", address);
+        cv.put("contactno", contact);
+        cv.put("pincode", pincode);
+        cv.put("date", date);
+        cv.put("time", time);
+        cv.put("amount", price);
+        cv.put("otype", otype);
         SQLiteDatabase db = getWritableDatabase();
-        db.insert("orderplace",null,cv);
+        db.insert("orderplace", null, cv);
         db.close();
     }
+
     public ArrayList<String> getOrderData(String username) {
         ArrayList<String> arr = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String str[] = new String[] {username};
+        String str[] = new String[]{username};
         Cursor c = db.rawQuery("SELECT * FROM orderplace WHERE username = ?", str);
         if (c.moveToFirst()) {
             do {
@@ -140,5 +144,25 @@ public class Database extends SQLiteOpenHelper {
         c.close();
         db.close();
         return arr;
+    }
+
+    public int checkAppointmentExists(String username, String fullname, String address, String contact, String date, String time) {
+
+
+        int result = 0;
+        String str[] = new String[6];
+        str[0] = username;
+        str[1] = fullname;
+        str[2] = address;
+        str[3] = contact;
+        str[4] = date;
+        str[5] = time;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("select * from orderplace where username = ? and fullname = ? and address = ? and contactno = ? and date = ? and time = ?", str);
+        if (c.moveToFirst()) {
+            result = 1;
+        }
+        db.close();
+        return result;
     }
 }

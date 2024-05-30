@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".LabTestBookActivity">
+    tools:context=".BuyMedicineBookActivity">
 
     <Button
         android:id="@+id/buttonBMBBooking"
@@ -144,6 +144,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.049" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

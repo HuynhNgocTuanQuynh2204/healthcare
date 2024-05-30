@@ -31,7 +31,7 @@ public class LabTestDetailsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        tvPackageName = findViewById(R.id.textViewLDPackageName);
+        tvPackageName = findViewById(R.id.textViewBMCartTitle);
         tvToTalCart = findViewById(R.id.textViewLDToTalCost);
         edDetails = findViewById(R.id.editTextLDTextMultiLine);
         btnAddToCart = findViewById(R.id.buttonLDAddToCart);

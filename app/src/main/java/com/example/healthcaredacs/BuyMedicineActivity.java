@@ -74,7 +74,8 @@ public class BuyMedicineActivity extends AppCompatActivity {
         btnGoToCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(BuyMedicineActivity.this,CardBuyMedicineActivity.class));
+                startActivity(new Intent(BuyMedicineActivity.this,CartBuyMedicineActivity.class));
+
             }
         });
 
